@@ -1,0 +1,37 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+block main
+    +alert-error("5000")
+    +alert-success("5000")
+    h1 Danh sách nhóm quyền
+    .card.mb-3 
+        .card-header Danh sách 
+            .card-bodyz
+                .row 
+                    .col-8 
+                    .col-4 
+                        a(
+                            href= `${prefixAdmin}/roles/create`
+                            class= "btn btn-outline-success"
+                        ) + Thêm mới
+                table(class= "table table-hover table-sm" checkbox-multi)
+                    thead 
+                        tr
+                            th 
+                                input(type= "checkbox" name= "check-all")
+                            th STT 
+                            th Tiêu đề
+                            th Mô tả
+                            th Hành động
+                    tbody
+                        each item, index in listData
+                            tr
+                                td
+                                    input(type="checkbox" name= "check-item" value=item.id)
+                                td #{index + 1}
+                                td #{item.title}
+                                td !{item.description}
+                                td 
+                                    a(href=`${prefixAdmin}/roles/edit/${item.id}` class= "btn btn-warning btn-sm") Sửa
+                                    button(class= "btn btn-danger btn-sm ms-1" data-id=item.id delete-item-button) Xóa
+    form(action="", method="POST" id= "form-delete-item" data-path= `${prefixAdmin}/roles/delete`)
