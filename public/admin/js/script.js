@@ -131,7 +131,7 @@ if (deleteItemButtons.length > 0) {
     const formDeleteItem = document.querySelector("#form-delete-item");
     deleteItemButtons.forEach(button => {
         button.addEventListener("click", () => {
-            const isConfirm = confirm("Bạn có chắc muốn xóa sản phẩm này không");
+            const isConfirm = confirm("Bạn có chắc muốn xóa không");
             if (isConfirm) {
                 const path = formDeleteItem.getAttribute("data-path");
                 const id = button.getAttribute("data-id");
