@@ -20,6 +20,7 @@ module.exports.create = async (req, res) => {
 }
 
 module.exports.createPost = async (req, res) => {
+    req.body.createdBy = {account_id: res.locals.user.id};
     try {
         await Role.create(req.body);
         req.flash("success", "Tạo mới thành công");
@@ -33,7 +34,13 @@ module.exports.createPost = async (req, res) => {
 
 module.exports.deleteItem = async (req, res) => {
     try {
-        await Role.updateOne({ _id: req.params.id }, { deleted: true, deleteAt: new Date() });
+        await Role.updateOne({ _id: req.params.id }, { 
+            deleted: true, 
+            deletedBy:{
+                account_id: res.locals.user.id,
+                deletedAt: new Date()
+            }
+        });
         req.flash("success", "Xóa thành công");
     }
     catch (error) {

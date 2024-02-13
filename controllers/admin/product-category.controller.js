@@ -36,6 +36,7 @@ module.exports.createPost = async(req,res) =>{
     else {
         req.body.position = parseInt(req.body.position);
     }
+    req.body.createdBy = {account_id: res.locals.user.id};
     try{ 
         await ProductCategory.create(req.body);
         req.flash("success", "Tạo danh mục thành công");
@@ -80,10 +81,17 @@ module.exports.editPatch = async (req,res) => {
 
 module.exports.deleteItem = async (req, res) =>{
     try{
-        await ProductCategory.updateOne({_id : req.params.id},{deleted: true, deleteAt: new Date()});
+        await ProductCategory.updateOne({_id : req.params.id},{
+            deleted: true, 
+            deletedBy:{
+                account_id: res.locals.user.id,
+                deletedAt: new Date()
+            }
+        });
         req.flash("success","Xóa thành công");
     }
     catch(error){
+        console.log(error);
         req.flash("error","Xóa không thành công");
     }   
     res.redirect("back");

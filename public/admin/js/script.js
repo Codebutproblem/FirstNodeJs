@@ -56,7 +56,7 @@ if (changeStatusButtons.length > 0) {
             let path = formChangeStatus.getAttribute("data-path");
             const id = button.getAttribute("item-id");
             const status = button.getAttribute("item-status");
-            const statusChanged = status == "active" ? "inactive" : "active";
+            const statusChanged = (status == "active" ? "inactive" : "active");
             const action = path + `/${statusChanged}/${id}?_method=PATCH`;
             formChangeStatus.action = action;
             formChangeStatus.submit();

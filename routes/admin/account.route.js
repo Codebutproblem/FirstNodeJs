@@ -12,4 +12,5 @@ router.post("/create",upload.single("avatar"),validate.checkFormCreate,uploadClo
 router.get("/edit/:id",controller.edit);
 router.patch("/edit/:id",upload.single("avatar"),validate.checkFormEdit,uploadCloud.upload,controller.editPatch);
 router.delete("/delete/:id",controller.delete);
+router.patch("/change-status/:status/:id",controller.changeStatus);
 module.exports = router;
