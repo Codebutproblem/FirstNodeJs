@@ -1,4 +1,5 @@
 const Role = require("../../models/role.model");
+const Account = require("../../models/account.model");
 const systemConfig = require("../../config/system");
 module.exports.index = async (req, res) => {
 
@@ -6,7 +7,19 @@ module.exports.index = async (req, res) => {
         deleted: false
     };
     const listData = await Role.find(find);
+    for(const data of listData){
+        console.log(data.createdBy);
+        const createdUser = await Account.findOne({_id: data.createdBy.account_id});
+        if(createdUser){
+            data.createdBy.fullName = createdUser.fullName;
+        }
 
+        const updatedBy = data.updatedBy.slice(-1)[0];
+        if(updatedBy){
+            const updatedUser = await Account.findOne({_id: updatedBy.account_id});
+            updatedBy.fullName = updatedUser.fullName;
+        }
+    }
     res.render("admin/pages/role/index", {
         pageTitle: "Phân quyền",
         listData: listData
@@ -59,9 +72,15 @@ module.exports.edit = async (req, res) => {
 }
 
 module.exports.editPatch = async (req, res) => {
-
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date()
+    };
     try {
-        await Role.updateOne({ _id: req.params.id }, req.body);
+        await Role.updateOne({ _id: req.params.id }, {
+            ...req.body,
+            $push:{updatedBy:updatedBy}
+        });
         req.flash("success", "Chỉnh sửa thành công");
         res.redirect(`${systemConfig.prefixAdmin}/roles`);
     }
@@ -84,12 +103,18 @@ module.exports.permission = async (req, res) => {
 }
 
 module.exports.permissionPatch = async (req,res) => {
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date()
+    };
 
     try{
         const permissions = JSON.parse(req.body.permissions);
-        console.log(permissions);
         for(const item of permissions){
-            await Role.updateOne({_id: item.id},{permissions: item.permissions});
+            await Role.updateOne({_id: item.id},{
+                permissions: item.permissions,
+                $push:{updatedBy:updatedBy}
+            });
         }
         req.flash("success","Cập nhật phân quyền thành công");
     }

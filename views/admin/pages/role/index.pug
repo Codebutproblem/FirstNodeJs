@@ -24,6 +24,8 @@ block main
                                 th STT 
                                 th Tiêu đề
                                 th Mô tả
+                                th Người tạo
+                                th Người cập nhật
                                 if (role.permissions.includes("roles_delete") || role.permissions.includes("roles_edit"))
                                     th Hành động
                         tbody
@@ -34,6 +36,15 @@ block main
                                     td #{index + 1}
                                     td #{item.title}
                                     td !{item.description}
+                                    td
+                                        if (item.createdBy.fullName)
+                                            p #{item.createdBy.fullName}
+                                            p #{moment(item.createdBy.createdAt).format("DD/MM/YYYY hh:mm:ss")}
+                                    td 
+                                        - const updatedBy = item.updatedBy.slice(-1)[0];
+                                        if (updatedBy)
+                                            p #{updatedBy.fullName}
+                                            p #{moment(updatedBy.updatedAt).format("DD/MM/YYYY hh:mm:ss")}
                                     td 
                                         if (role.permissions.includes("roles_edit"))
                                             a(href=`${prefixAdmin}/roles/edit/${item.id}` class= "btn btn-warning btn-sm") Sửa

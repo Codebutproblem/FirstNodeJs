@@ -81,3 +81,35 @@
     padding: 3px 10px;
     border-radius: 8px;
 }
+
+.sub-menu{
+    position: relative;
+}
+
+.sub-menu ul{
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #dbd7d7;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: none;
+    min-width: 180px;
+}
+.sub-menu ul li{
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+.sub-menu:hover > ul{
+    display: block;
+}
+.sub-menu ul li{
+    position: relative;
+}
+.sub-menu ul li:hover > ul{
+    display: block;
+    position: absolute;
+    top:0;
+    right: 100%;
+}

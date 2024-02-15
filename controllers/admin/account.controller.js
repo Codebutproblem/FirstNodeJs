@@ -16,6 +16,17 @@ module.exports.index = async (req,res) => {
     for(const record of records){
         const role = await Role.findOne({_id: record.role_id, deleted: false});
         record.role = role;
+
+        const createdUser = await Account.findOne({_id: record.createdBy.account_id});
+        if(createdUser){
+            record.createdBy.fullName = createdUser.fullName;
+        }
+
+        const updatedBy = record.updatedBy.slice(-1)[0];
+        if(updatedBy){
+            const updatedUser = await Account.findOne({_id: updatedBy.account_id});
+            updatedBy.fullName = updatedUser.fullName;
+        }
     }
     res.render("admin/pages/account/index",{
         pageTitle: "Danh sách tài khoản",
@@ -89,8 +100,20 @@ module.exports.editPatch = async (req,res) =>{
         else{
             delete req.body.password;
         }
-        await Account.updateOne({_id: id},req.body);
-        req.flash("success","Cập nhật tài khoản thành công");
+        const updatedBy = {
+            account_id: res.locals.user.id,
+            updatedAt: new Date()
+        };
+        try{
+            await Account.updateOne({_id: id},{
+                ...req.body,
+                $push:{updatedBy:updatedBy}
+            });
+            req.flash("success","Cập nhật tài khoản thành công");
+        }
+        catch(error){
+            req.flash("error","Cập nhật tài khoản không thành công");
+        }
         res.redirect(`${systemConfig.prefixAdmin}/accounts`);
     }
 }
@@ -116,8 +139,15 @@ module.exports.delete = async (req,res) =>{
 module.exports.changeStatus = async (req,res) =>{
     const status = req.params.status;
     const id = req.params.id;
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date()
+    };
     try{
-        await Account.updateOne({_id: id},{status: status});
+        await Account.updateOne({_id: id},{
+            status: status,
+            $push:{updatedBy:updatedBy}
+        });
         req.flash("success", "Cập nhật tài khoản thành công");
     }
     catch(error){
