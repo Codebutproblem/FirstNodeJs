@@ -4,6 +4,5 @@ module.exports.category = async (req,res,next) => {
     const categories = await productCategory.find({deleted: false});
     const categoryTree = createTreeHelper.create(categories);
     res.locals.categories = categoryTree;
-    console.log(res.locals.categories);
     next();
 }
