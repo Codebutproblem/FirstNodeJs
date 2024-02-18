@@ -57,7 +57,7 @@ module.exports.category = async (req, res) => {
         item.newPrice = Math.round(item.price*(1-(item.discountPercentage/100)));
     })
     res.render("client/pages/products/index",{
-        pageTitle: "Sản phẩm",
+        pageTitle: productCategory.title,
         products: products
     });
 }
