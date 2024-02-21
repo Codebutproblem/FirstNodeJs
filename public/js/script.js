@@ -10,3 +10,16 @@ if (showAlert) {
         showAlert.classList.add("alert-hidden");
     });
 }
+
+// Change Number Product in Cart
+
+const quantityInputs = document.querySelectorAll("input[name='quantity']");
+if(quantityInputs.length > 0){
+    quantityInputs.forEach(input => {
+        input.addEventListener("change",(event)=>{
+            const productId = input.getAttribute("product_id");
+            const quantity = event.target.value;
+            window.location.href = `/cart/update/${quantity}/${productId}`;
+        });
+    });
+}

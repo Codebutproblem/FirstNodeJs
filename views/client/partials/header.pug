@@ -30,4 +30,4 @@ header.header
                             a(href=path) Sản phẩm
                             +sub-menu(categories,path)
                         li
-                            a(href="#") Giỏ hàng (#{cart.totalProducts})
+                            a(href="/cart") Giỏ hàng (#{cart.totalProducts ? cart.totalProducts: 0})

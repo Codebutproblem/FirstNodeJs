@@ -13,7 +13,7 @@ module.exports.cartId = async (req, res, next) => {
         const cart = await Cart.findOne({
             _id: req.cookies.cartId
         });
-    
+        
         cart.totalProducts = cart.products.reduce((sum,product) => sum + product.quantity, 0);
         res.locals.cart = cart;
     }
