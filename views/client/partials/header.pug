@@ -5,7 +5,7 @@ header.header
             .col-3 
                 .inner-logo 
                     a(href = "/")
-                        img(src= "/images/logo.svg", alt= "Logo")
+                        img(src= "/images/logo.svg", alt= "Logo" width="100px")
             .col-5 
                 form(
                     action="/search"
@@ -31,3 +31,12 @@ header.header
                             +sub-menu(categories,path)
                         li
                             a(href="/cart") Giỏ hàng (#{cart.totalProducts ? cart.totalProducts: 0})
+                        if (user)
+                            li 
+                                a(href="/user/logout") Đăng xuất
+                            li Hi #{user.fullName} 
+                        else 
+                            li 
+                                a(href="/user/register") Đăng ký
+                            li 
+                                a(href="/user/login") Đăng nhập

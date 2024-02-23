@@ -58,7 +58,22 @@ module.exports.order = async (req, res) => {
 }
 
 module.exports.success = async (req, res) => {
+    const cartId = req.cookies.cartId;
+    const order = await Order.findOne({
+        cart_id : cartId
+    });
+    for(const product of order.products){
+        const productInfo = await Product.findOne({
+            _id: product.product_id
+        });
+        productInfo.newPrice = Math.round(productInfo.price * (1- (productInfo.discountPercentage/100)));
+        product.productInfo = productInfo;
+        product.totalPrice = product.quantity * productInfo.newPrice;
+    }
+    order.totalPrice = order.products.reduce((sum, product) => sum + product.totalPrice , 0);
+    console.log(order.totalPrice);
     res.render("client/pages/checkout/success",{
-        pageTitle: "Thanh toán thành công"
+        pageTitle: "Thanh toán thành công",
+        order: order
     });
 }
