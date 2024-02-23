@@ -1,0 +1,25 @@
+extends ../../layouts/default.pug
+block main 
+    .container.my-5 
+        .row.justify-content-center 
+            .col-8 
+                h1(class="text-center") Quên mật khẩu
+                form(
+                    action="/user/password/forgot", 
+                    method="post"
+                ) 
+                    div(class="mb-3")
+                        label(for="email" class="form-label") Email:
+                        input(
+                            type="email"
+                            class="form-control"
+                            id="email"
+                            name="email"
+                            required 
+                        )
+                    div(class="mb-3")
+                        button(
+                            type="submit"
+                            class="btn btn-primary w-100"
+                        ) Gửi mã
+                    
